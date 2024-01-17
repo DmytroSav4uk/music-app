@@ -1,0 +1,35 @@
+<p>music works!</p>
+
+
+<input type="file" id="input" (change)="loadFolder($event)" webkitdirectory directory />
+
+
+
+<button (click)="next()">Next</button>
+<button (click)="previous()">Previous</button>
+
+<button (click)="pause()">Stop</button>
+
+<button (click)="play()">Play</button>
+
+
+<div class="track-name">
+  {{ currentTrackName }}
+</div>
+
+<div class="track-name">
+  {{ currentTrackAlbum }}
+</div>
+
+<div class="progress-bar-container">
+  <input type="range" class="seek-bar" [value]="progress" (input)="seek($event)" />
+</div>
+
+<div class="time-display">
+  <span>{{ formatTime(currentTime) }}</span> / <span>{{ formatTime(totalTime) }}</span>
+</div>
+
+
+<img [src]="imagePath" alt="cover"/>
+
+
