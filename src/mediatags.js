@@ -25,19 +25,19 @@ app.post('/processAudio', upload.single('audioFile'), (req, res) => {
         const pictureData = tag.tags.picture.data;
         const pictureBuffer = Buffer.from(pictureData);
 
-        // Send the image file directly in the response
+
         res.writeHead(200, {
-          'Content-Type': 'image/jpeg', // Adjust content type based on your image format
+          'Content-Type': 'image/jpeg',
           'Content-Length': pictureBuffer.length,
         });
         res.end(pictureBuffer);
       } else {
-        // Send response with message "no cover" instead of an error
+
         res.status(200).json({ message: 'no cover' });
       }
     },
     onError: (error) => {
-      // Send response with message "Error processing audio file" instead of an error
+
       res.status(200).json({ message: 'Error processing audio file', details: error });
     },
   });

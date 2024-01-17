@@ -107,6 +107,7 @@ export class MusicService {
   }
   pause(): void {
     this.sound.pause();
+
   }
   stop(): void {
     if (this.sound) {
@@ -151,4 +152,13 @@ export class MusicService {
       });
     }
   }
+
+
+  setVolume(volume: number): void {
+    if (this.sound) {
+      const clampedVolume = Math.max(0, Math.min(1, volume));
+      this.sound.volume(clampedVolume);
+    }
+  }
+
 }

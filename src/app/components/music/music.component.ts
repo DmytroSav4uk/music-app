@@ -1,13 +1,15 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MusicService} from "../../services/music.service";
 import {NgOptimizedImage} from "@angular/common";
+import {FormsModule} from "@angular/forms";
 
 
 @Component({
   selector: 'app-music',
   standalone: true,
   imports: [
-    NgOptimizedImage
+    NgOptimizedImage,
+    FormsModule
   ],
   templateUrl: './music.component.html',
   styleUrl: './music.component.css'
@@ -16,7 +18,7 @@ export class MusicComponent implements OnInit {
 
   @ViewChild('fileInput') fileInput: any;
 
-
+  volumeValue: number = 1;
   progress: number = 0;
   currentTime: number = 0;
   totalTime: number = 0;
@@ -34,6 +36,9 @@ export class MusicComponent implements OnInit {
     });
   }
 
+
+  loadedFiles: File[] = [];
+
   loadFolder(event: any): void {
     const files = event.target.files;
     this.musicService.loadFolder(files);
@@ -44,6 +49,14 @@ export class MusicComponent implements OnInit {
     this.updateTrackName();
     this.loadCover()
     this.musicPlays = true
+
+
+    for (let i = 0; i < files.length; i++) {
+      this.loadedFiles.push(files[i]);
+    }
+
+    console.log(this.loadedFiles)
+
   }
 
   play(): void {
@@ -86,8 +99,12 @@ export class MusicComponent implements OnInit {
   // }
 
 
-  cleanTrackName(){
-    return this.currentTrackName.replace('.mp3','')
+  cleanTrackName(name:string){
+    return name.replace('.mp3','')
+  }
+
+  changeVolume(){
+    this.musicService.setVolume(this.volumeValue)
   }
 
 

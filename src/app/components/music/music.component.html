@@ -1,27 +1,38 @@
 <div class="leftPanel">
-  <input type="file" #fileInput (change)="loadFolder($event)" webkitdirectory directory/>
-</div>
+  <input style="display: none" type="file" #fileInput (change)="loadFolder($event)" webkitdirectory directory/>
 
+
+    <img (click)="triggerFileInput()" class="uploadMusic" src="assets/icons/uploadMusic.png">
+
+
+
+
+  <ol>
+    @for (file of loadedFiles; track file) {
+      <li class="neonText">{{ cleanTrackName(file.name) }}</li>
+    }
+  </ol>
+
+
+</div>
 
 
 <div class="track">
 
   @if (imagePath) {
 
-      <img class="cover " [src]="imagePath" alt="cover"/>
-
+    <img class="cover " [src]="imagePath" alt="cover"/>
 
 
   } @else {
 
-    <img  class="cover initialcover" src="assets/cover/note.jpg" alt="cover" (click)="triggerFileInput()"/>
-
+    <img class="cover initialcover" src="assets/cover/note.jpg" alt="cover" (click)="triggerFileInput()"/>
 
 
   }
 
   <div class="track-name neonText">
-    <h1 class="track-name-h1"> {{ cleanTrackName() }} </h1>
+    <h1 class="track-name-h1"> {{ cleanTrackName(currentTrackName) }} </h1>
   </div>
 
   <div class="progress-bar-container">
@@ -33,7 +44,7 @@
 
     <div class="range">
 
-      @if (musicPlays){
+      @if (musicPlays) {
         <div id="bars">
 
           <div class="bar"></div>
@@ -53,51 +64,58 @@
           <div class="bar"></div>
         </div>
       }
-      <input  type="range" class="seek-bar" [value]="progress" (input)="seek($event)"/>
+      <input type="range" class="seek-bar" [value]="progress" (input)="seek($event)"/>
     </div>
   </div>
   <div class="controls">
-    <button (click)="previous()">
-      <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M7 13.7321C5.66667 12.9623 5.66667 11.0377 7 10.2679L16 5.0718C17.3333 4.302 19 5.26425 19 6.80385L19 17.1962C19 18.7358 17.3333 19.698 16 18.9282L7 13.7321Z"
-          stroke="#ffffff" stroke-linejoin="round" stroke-width="2"/>
-        <path d="M4 19L4 5" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-      </svg>
-    </button>
 
-    @if (musicPlays){
-      <button (click)="pause()">
+    <div>
+      <button (click)="previous()">
         <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
           <path
-            d="M5 7C5 5.89543 5.89543 5 7 5H8C9.10457 5 10 5.89543 10 7V17C10 18.1046 9.10457 19 8 19H7C5.89543 19 5 18.1046 5 17V7Z"
+            d="M7 13.7321C5.66667 12.9623 5.66667 11.0377 7 10.2679L16 5.0718C17.3333 4.302 19 5.26425 19 6.80385L19 17.1962C19 18.7358 17.3333 19.698 16 18.9282L7 13.7321Z"
             stroke="#ffffff" stroke-linejoin="round" stroke-width="2"/>
-          <path
-            d="M14 7C14 5.89543 14.8954 5 16 5H17C18.1046 5 19 5.89543 19 7V17C19 18.1046 18.1046 19 17 19H16C14.8954 19 14 18.1046 14 17V7Z"
-            stroke="#ffffff" stroke-linejoin="round" stroke-width="2"/>
+          <path d="M4 19L4 5" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
         </svg>
       </button>
-    } @else {
-      <button (click)="play()">
-        <svg class="icon icon-tabler icon-tabler-player-play" fill="none" height="24" stroke="#ffffff"
-             stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24"
-             xmlns="http://www.w3.org/2000/svg">
-          <path d="M0 0h24v24H0z" fill="none" stroke="none"/>
-          <path d="M7 4v16l13 -8z"/>
-        </svg>
-      </button>
-    }
-    <button (click)="next()">
-      <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M17 10.2679C18.3333 11.0377 18.3333 12.9623 17 13.7321L8 18.9282C6.66667 19.698 5 18.7358 5 17.1962L5 6.80385C5 5.26425 6.66667 4.302 8 5.0718L17 10.2679Z"
-          stroke="#ffffff" stroke-linejoin="round" stroke-width="2"/>
-        <path d="M20 5V19" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-      </svg>
-    </button>
-  </div>
-</div>
 
+      @if (musicPlays) {
+        <button (click)="pause()">
+          <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M5 7C5 5.89543 5.89543 5 7 5H8C9.10457 5 10 5.89543 10 7V17C10 18.1046 9.10457 19 8 19H7C5.89543 19 5 18.1046 5 17V7Z"
+              stroke="#ffffff" stroke-linejoin="round" stroke-width="2"/>
+            <path
+              d="M14 7C14 5.89543 14.8954 5 16 5H17C18.1046 5 19 5.89543 19 7V17C19 18.1046 18.1046 19 17 19H16C14.8954 19 14 18.1046 14 17V7Z"
+              stroke="#ffffff" stroke-linejoin="round" stroke-width="2"/>
+          </svg>
+        </button>
+      } @else {
+        <button (click)="play()">
+          <svg class="icon icon-tabler icon-tabler-player-play" fill="none" height="24" stroke="#ffffff"
+               stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24"
+               xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 0h24v24H0z" fill="none" stroke="none"/>
+            <path d="M7 4v16l13 -8z"/>
+          </svg>
+        </button>
+      }
+      <button (click)="next()">
+        <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M17 10.2679C18.3333 11.0377 18.3333 12.9623 17 13.7321L8 18.9282C6.66667 19.698 5 18.7358 5 17.1962L5 6.80385C5 5.26425 6.66667 4.302 8 5.0718L17 10.2679Z"
+            stroke="#ffffff" stroke-linejoin="round" stroke-width="2"/>
+          <path d="M20 5V19" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </svg>
+      </button>
+    </div>
+
+
+    <input class="volumeInput" type="range" min="0" max="1" step="0.01" [(ngModel)]="volumeValue" (input)="changeVolume()" />
+  </div>
+
+
+</div>
 
 
 <div class="rightPanel">

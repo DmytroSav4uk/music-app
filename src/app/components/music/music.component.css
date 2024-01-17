@@ -10,6 +10,14 @@
   animation: pulsate 10s ease-in-out infinite alternate
 }
 
+
+.uploadMusic {
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
+}
+
+
 @keyframes pulsate {
 
   100% {
@@ -182,11 +190,23 @@ input[type="range"]::-ms-thumb:active {
 
 }
 
+
+.volumeInput{
+
+  width: 100%!important;
+}
+
+
 .leftPanel {
+
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-direction: column;
+
   border-right: 1px solid #313131;
   width: 300px;
   height: 100%;
-  display: block;
 }
 
 .rightPanel {
@@ -198,6 +218,12 @@ input[type="range"]::-ms-thumb:active {
 
 
 .controls {
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+
   margin-top: 40px;
   border-radius: 10px;
 
@@ -211,7 +237,7 @@ input[type="range"]::-ms-thumb:active {
   background: none;
   border: none;
   cursor: pointer;
-  width: 100px;
+  width: 50px;
 }
 
 .range {
