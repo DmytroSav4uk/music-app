@@ -21,6 +21,7 @@ export class MusicComponent implements OnInit {
   currentTrackName: string = '';
   currentTrackAlbum: string | undefined = '';
   coverPath!: string;
+  musicPlays:boolean = false;
 
   constructor(private musicService: MusicService) {
   }
@@ -40,26 +41,31 @@ export class MusicComponent implements OnInit {
     this.updateProgress();
     this.updateTrackName();
     this.loadCover()
+    this.musicPlays = true
   }
 
   play(): void {
     this.musicService.play();
+    this.musicPlays = true
   }
 
   pause(): void {
     this.musicService.pause();
+    this.musicPlays = false
   }
 
   next() {
     this.musicService.next()
     this.updateTrackName();
     this.loadCover()
+    this.musicPlays = true
   }
 
   previous() {
     this.musicService.previous()
     this.updateTrackName();
     this.loadCover()
+    this.musicPlays = true
   }
 
   updateProgress(): void {
@@ -100,9 +106,16 @@ export class MusicComponent implements OnInit {
 
   loadCover() {
     this.musicService.loadCover().subscribe((res: any) => {
+      console.log(typeof res)
       console.log(res)
-      this.imagePath = res
-      console.log(this.imagePath)
+
+      if (typeof res === "object"){
+        this.imagePath = '/assets/cover/common.jpg'
+      }else {
+        this.imagePath = res
+      }
+console.log("image path" + this.imagePath)
+
     })
   }
 

@@ -69,19 +69,42 @@ export class MusicService {
 
 
 
-    loadCover() {
-      const path = 'http://localhost:3000/processAudio';
+  loadCover() {
+    const path = 'http://localhost:3000/processAudio';
 
-      const formData = new FormData();
-      formData.append('audioFile', this.currentTrackFile);
+    const formData = new FormData();
+    formData.append('audioFile', this.currentTrackFile);
 
-      return this.http.post(path, formData, { responseType: 'blob' }).pipe(
-        map((blob: Blob) => {
+    return this.http.post(path, formData, { responseType: 'blob' }).pipe(
+      map((blob: Blob) => {
+
+        const contentType = blob.type;
+        if (contentType && contentType.startsWith('image')) {
+
           return URL.createObjectURL(blob);
-        })
-      );
+        } else {
 
-    }
+          return this.parseJsonBlob(blob);
+        }
+      })
+    );
+  }
+
+  private parseJsonBlob(blob: Blob): any {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result as string;
+        try {
+          const parsedResult = JSON.parse(result);
+          resolve(parsedResult);
+        } catch (error) {
+          resolve({ message: 'Error parsing JSON response' });
+        }
+      };
+      reader.readAsText(blob);
+    });
+  }
 
 
 

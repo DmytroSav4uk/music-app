@@ -14,7 +14,7 @@ const upload = multer({ storage: storage });
 
 app.post('/processAudio', upload.single('audioFile'), (req, res) => {
   if (!req.file) {
-    return res.status(400).json({ error: 'No audio file provided' });
+    return res.status(200).json({ message: 'No audio file provided' });
   }
 
   const audioBuffer = req.file.buffer;
@@ -32,11 +32,13 @@ app.post('/processAudio', upload.single('audioFile'), (req, res) => {
         });
         res.end(pictureBuffer);
       } else {
-        res.status(404).json({ error: 'No image found in the audio file metadata' });
+        // Send response with message "no cover" instead of an error
+        res.status(200).json({ message: 'no cover' });
       }
     },
     onError: (error) => {
-      res.status(500).json({ error: 'Error processing audio file', details: error });
+      // Send response with message "Error processing audio file" instead of an error
+      res.status(200).json({ message: 'Error processing audio file', details: error });
     },
   });
 });
