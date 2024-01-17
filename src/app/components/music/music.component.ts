@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {MusicService} from "../../services/music.service";
 import {NgOptimizedImage} from "@angular/common";
 
@@ -14,14 +14,15 @@ import {NgOptimizedImage} from "@angular/common";
 })
 export class MusicComponent implements OnInit {
 
+  @ViewChild('fileInput') fileInput: any;
+
 
   progress: number = 0;
   currentTime: number = 0;
   totalTime: number = 0;
   currentTrackName: string = '';
-  currentTrackAlbum: string | undefined = '';
-  coverPath!: string;
-  musicPlays:boolean = false;
+
+  musicPlays: boolean = false;
 
   constructor(private musicService: MusicService) {
   }
@@ -36,7 +37,8 @@ export class MusicComponent implements OnInit {
   loadFolder(event: any): void {
     const files = event.target.files;
     this.musicService.loadFolder(files);
-    this.musicService.loadTrack(0);
+    this.musicService.loadTrack(0)
+
     this.musicService.play();
     this.updateProgress();
     this.updateTrackName();
@@ -77,11 +79,17 @@ export class MusicComponent implements OnInit {
     }, 1000);
   }
 
-  resetTime(): void {
-    this.progress = 0;
-    this.currentTime = 0;
-    this.totalTime = 0;
+  // resetTime(): void {
+  //   this.progress = 0;
+  //   this.currentTime = 0;
+  //   this.totalTime = 0;
+  // }
+
+
+  cleanTrackName(){
+    return this.currentTrackName.replace('.mp3','')
   }
+
 
   seek(event: any): void {
     const position = event.target.value;
@@ -109,15 +117,17 @@ export class MusicComponent implements OnInit {
       console.log(typeof res)
       console.log(res)
 
-      if (typeof res === "object"){
+      if (typeof res === "object") {
         this.imagePath = '/assets/cover/common.jpg'
-      }else {
+      } else {
         this.imagePath = res
       }
-console.log("image path" + this.imagePath)
+      console.log("image path" + this.imagePath)
 
     })
   }
 
-
+  triggerFileInput() {
+    this.fileInput.nativeElement.click();
+  }
 }

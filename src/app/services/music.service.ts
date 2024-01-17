@@ -15,18 +15,15 @@ interface PlaylistItem {
 })
 export class MusicService {
 
-
   constructor(private http:HttpClient) {
   }
-
 
   private sound!: Howl;
   private playlist: PlaylistItem[] = [];
   private currentTrackIndex: number = 0;
   private progressInterval: any;
   private fileNames: string[] = [];
-  private currentTrackFile:any;
-
+  public currentTrackFile:any;
 
   trackInfoUpdated = new EventEmitter<{ name: string }>();
 
@@ -40,16 +37,15 @@ export class MusicService {
 
       this.playlist.push({file, url});
       this.fileNames.push(file.name);
-
     }
   }
 
-  loadTrack(index: number): void {
+  loadTrack(index: number): File | undefined {
     if (index >= 0 && index < this.playlist.length) {
       this.stop();
       this.currentTrackIndex = index;
       this.currentTrackFile = this.playlist[index].file;
-      console.log(this.currentTrackFile)
+
       this.sound = new Howl({
         src: [this.playlist[index].url],
         html5: true,
@@ -63,10 +59,11 @@ export class MusicService {
       }, 1000);
 
       this.updateTrackInfo();
+      return this.currentTrackFile;
     }
+
+    return undefined;
   }
-
-
 
 
   loadCover() {
@@ -105,51 +102,39 @@ export class MusicService {
       reader.readAsText(blob);
     });
   }
-
-
-
-
   play(): void {
     this.sound.play();
   }
-
   pause(): void {
     this.sound.pause();
   }
-
   stop(): void {
     if (this.sound) {
       this.sound.stop();
     }
   }
-
   next(): void {
     this.stop();
     this.currentTrackIndex = (this.currentTrackIndex + 1) % this.playlist.length;
     this.loadTrack(this.currentTrackIndex);
     this.play();
   }
-
   previous(): void {
     this.stop();
     this.currentTrackIndex = (this.currentTrackIndex - 1 + this.playlist.length) % this.playlist.length;
     this.loadTrack(this.currentTrackIndex);
     this.play();
   }
-
   seek(position: number): void {
     this.sound.seek(this.sound.duration() * (position / 100));
   }
-
   updateProgress(): void {
     const progress = (this.sound.seek() / this.sound.duration()) * 100;
     // Handle progress update as needed
   }
-
   getCurrentTime(): number {
     return this.sound.seek();
   }
-
   getTotalTime(): number {
     return this.sound.duration();
   }
@@ -157,7 +142,6 @@ export class MusicService {
   getCurrentTrackName(): string {
     return this.fileNames[this.currentTrackIndex] || '';
   }
-
   updateTrackInfo(): void {
     const currentTrack = this.playlist[this.currentTrackIndex];
     if (currentTrack) {
