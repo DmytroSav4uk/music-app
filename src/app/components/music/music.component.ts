@@ -18,7 +18,7 @@ export class MusicComponent implements OnInit {
 
   @ViewChild('fileInput') fileInput: any;
 
-  volumeValue: number = 1;
+ public volumeValue: number = 1;
   progress: number = 0;
   currentTime: number = 0;
   totalTime: number = 0;
@@ -74,6 +74,7 @@ export class MusicComponent implements OnInit {
     this.updateTrackName();
     this.loadCover()
     this.musicPlays = true
+    this.changeVolume()
   }
 
   previous() {
@@ -81,6 +82,7 @@ export class MusicComponent implements OnInit {
     this.updateTrackName();
     this.loadCover()
     this.musicPlays = true
+    this.changeVolume()
   }
 
   updateProgress(): void {
@@ -103,7 +105,7 @@ export class MusicComponent implements OnInit {
     return name.replace('.mp3','')
   }
 
-  changeVolume(){
+  public changeVolume(){
     this.musicService.setVolume(this.volumeValue)
   }
 

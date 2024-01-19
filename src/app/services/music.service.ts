@@ -1,7 +1,7 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {Howl} from 'howler';
 import {HttpClient} from "@angular/common/http";
-import { map } from 'rxjs';
+import {map} from 'rxjs';
 
 
 interface PlaylistItem {
@@ -15,7 +15,7 @@ interface PlaylistItem {
 })
 export class MusicService {
 
-  constructor(private http:HttpClient) {
+  constructor(private http: HttpClient) {
   }
 
   private sound!: Howl;
@@ -23,7 +23,8 @@ export class MusicService {
   private currentTrackIndex: number = 0;
   private progressInterval: any;
   private fileNames: string[] = [];
-  public currentTrackFile:any;
+  public currentTrackFile: any;
+  volumeValue: any
 
   trackInfoUpdated = new EventEmitter<{ name: string }>();
 
@@ -72,7 +73,7 @@ export class MusicService {
     const formData = new FormData();
     formData.append('audioFile', this.currentTrackFile);
 
-    return this.http.post(path, formData, { responseType: 'blob' }).pipe(
+    return this.http.post(path, formData, {responseType: 'blob'}).pipe(
       map((blob: Blob) => {
 
         const contentType = blob.type;
@@ -96,46 +97,56 @@ export class MusicService {
           const parsedResult = JSON.parse(result);
           resolve(parsedResult);
         } catch (error) {
-          resolve({ message: 'Error parsing JSON response' });
+          resolve({message: 'Error parsing JSON response'});
         }
       };
       reader.readAsText(blob);
     });
   }
+
   play(): void {
     this.sound.play();
   }
+
   pause(): void {
     this.sound.pause();
 
   }
+
   stop(): void {
     if (this.sound) {
       this.sound.stop();
     }
   }
+
   next(): void {
     this.stop();
     this.currentTrackIndex = (this.currentTrackIndex + 1) % this.playlist.length;
     this.loadTrack(this.currentTrackIndex);
     this.play();
+    this.setVolume(this.volumeValue)
   }
+
   previous(): void {
     this.stop();
     this.currentTrackIndex = (this.currentTrackIndex - 1 + this.playlist.length) % this.playlist.length;
     this.loadTrack(this.currentTrackIndex);
     this.play();
   }
+
   seek(position: number): void {
     this.sound.seek(this.sound.duration() * (position / 100));
   }
+
   updateProgress(): void {
     const progress = (this.sound.seek() / this.sound.duration()) * 100;
     // Handle progress update as needed
   }
+
   getCurrentTime(): number {
     return this.sound.seek();
   }
+
   getTotalTime(): number {
     return this.sound.duration();
   }
@@ -143,6 +154,7 @@ export class MusicService {
   getCurrentTrackName(): string {
     return this.fileNames[this.currentTrackIndex] || '';
   }
+
   updateTrackInfo(): void {
     const currentTrack = this.playlist[this.currentTrackIndex];
     if (currentTrack) {
@@ -159,6 +171,6 @@ export class MusicService {
       const clampedVolume = Math.max(0, Math.min(1, volume));
       this.sound.volume(clampedVolume);
     }
+    this.volumeValue = volume
   }
-
 }

@@ -7,7 +7,14 @@
 
 .track-name-h1 {
   text-align: center;
-  animation: pulsate 10s ease-in-out infinite alternate
+  text-shadow: 0 0 4px #d01e1e,
+  0 0 10px #fff,
+  0 0 18px #753030,
+  0 0 38px #48abe0,
+  0 0 73px #dbde31,
+  0 0 80px #8a2be2,
+  0 0 94px #ff1493,
+  0 0 140px #f09;
 }
 
 
